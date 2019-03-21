@@ -2,6 +2,10 @@ public class BinaryCountNode
 {
 	String color;
 	int count;
+	
+	BinaryCountNode leftChild;
+	BinaryCountNode rightChild;
+	
 	public BinaryCountNode()
 	{
 		color = "";
@@ -14,18 +18,18 @@ public class BinaryCountNode
 		count = 0;
 	}
 	
-	public void add()
+	public void incrementCount()
 	{
 		count++;
 	}
 	
 	public int compareTo(String s)
 	{
-		if(this.color == s)
+		if(this.color.compareTo(s) == 0)
 		{
 			return 0;
 		}
-		else if()
+		else if(this.color.compareTo(s) > 0)
 		{
 			return 1;
 		}
