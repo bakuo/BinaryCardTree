@@ -15,7 +15,7 @@ public class BinaryCountNode
 	public BinaryCountNode(String s)
 	{
 		this.color = s;
-		count = 0;
+		count = 1;
 	}
 	
 	public void incrementCount()
@@ -37,5 +37,10 @@ public class BinaryCountNode
 		{
 			return -1;
 		}
+	}
+	
+	public String toString() 
+	{ 
+		return color;
 	}
 }

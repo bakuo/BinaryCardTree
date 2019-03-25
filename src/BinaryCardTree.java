@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class BinaryCardTree 
 {
@@ -6,16 +7,16 @@ public class BinaryCardTree
 	BinaryCountNode root = new BinaryCountNode();
 	ArrayList<String> cards = new ArrayList<String>();
 	
-	public static void main(String args[])
+	public void insertCard(String s)
 	{
-		
+		addNode(root, s);
 	}
 	
 	public BinaryCountNode addNode(BinaryCountNode targetroot, String val) 
 	{
 		if(root == null) 
 		{
-			root = new BinaryCountNode();
+			root = new BinaryCountNode(val);
 			numNodes++;
 			return root;
 		} 
@@ -50,19 +51,42 @@ public class BinaryCardTree
 			else if(targetroot.compareTo(val) == 0)
 			{
 				targetroot.incrementCount();
+				numNodes++;
 			}
 		}
 		return root;
 	}	
 	
-	public ArrayList getAllCards()
+	public ArrayList<String> getAllCards()
 	{
+		cards.clear();
+		getAllCardsRec(root);
 		return cards;
+	}
+	
+	public void getAllCardsRec(BinaryCountNode targetroot)
+	{
+		if(targetroot != null) 
+		{
+			getAllCardsRec(targetroot.leftChild);
+			if(targetroot.count > 1)
+			{
+				for(int i = 0; i < targetroot.count; i++)
+				{
+					cards.add(targetroot.toString());
+				}
+			}
+			else
+			{
+				cards.add(targetroot.toString());
+			}
+			getAllCardsRec(targetroot.rightChild);
+		}
 	}
 	
 	public int numCardsInHand()
 	{
-		return 0;
+		return numNodes;
 	}
 	
 	public ArrayList getMostColorCard()
@@ -75,7 +99,7 @@ public class BinaryCardTree
 		return cards;
 	}
 	
-	public ArrayList removeCards()
+	public ArrayList removeCards(String s)
 	{
 		return cards;
 	}
