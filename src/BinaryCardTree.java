@@ -3,9 +3,12 @@ import java.util.Scanner;
 
 public class BinaryCardTree 
 {
-	int numNodes = 0;
+	int numNodes = 0, largest, smallest, contains;
 	BinaryCountNode root = new BinaryCountNode();
 	ArrayList<String> cards = new ArrayList<String>();
+	ArrayList<String> colorLargest = new ArrayList<String>();
+	ArrayList<String> colorSmallest = new ArrayList<String>();
+	ArrayList<String> removecards = new ArrayList<String>();
 	
 	public void insertCard(String s)
 	{
@@ -89,23 +92,112 @@ public class BinaryCardTree
 		return numNodes;
 	}
 	
-	public ArrayList getMostColorCard()
+	public ArrayList<String> getMostColorCard()
 	{
-		return cards;
+		largest = 0;
+		colorLargest.clear();
+		getMostColorCardRec(root);
+		return colorLargest;
 	}
 	
-	public ArrayList getLeastColorCard()
+	public void getMostColorCardRec(BinaryCountNode targetroot)
 	{
-		return cards;
+		if(targetroot == null) 
+		{
+		}
+		else 
+		{
+			if(targetroot.count > largest) 
+			{
+				largest = targetroot.count;
+				colorLargest.clear();
+				for(int i=0;i<targetroot.count;i++)
+				{
+					colorLargest.add(targetroot.toString());
+				}
+			}
+			getMostColorCardRec(targetroot.leftChild);
+			getMostColorCardRec(targetroot.rightChild);
+		}
 	}
 	
-	public ArrayList removeCards(String s)
+	public ArrayList<String> getLeastColorCard()
 	{
-		return cards;
+		smallest = root.count;
+		colorSmallest.clear();
+		getLeastColorCardRec(root);
+		return colorSmallest;
 	}
 	
-	public int contains()
+	public void getLeastColorCardRec(BinaryCountNode targetroot)
 	{
-		return 0;
+		if(targetroot == null) 
+		{
+		}
+		else 
+		{
+			if(targetroot.count < smallest) 
+			{
+				smallest = targetroot.count;
+				colorSmallest.clear();
+				for(int i=0;i<targetroot.count;i++)
+				{
+					colorSmallest.add(targetroot.toString());
+				}
+			}
+			getMostColorCardRec(targetroot.leftChild);
+			getMostColorCardRec(targetroot.rightChild);
+		}
+	}
+	
+	public ArrayList<String> removeCards(String s, int n)
+	{
+		removecards.clear();
+		removeCardsRec(root, s, n);
+		return removecards;
+	}
+	
+	public void removeCardsRec(BinaryCountNode targetroot, String s, int n)
+	{
+		if(targetroot.compareTo(s) == 0) 
+		{
+			for(int i=0;i<n;i++)
+			{
+				targetroot.count--;
+				numNodes--;
+				cards.remove(s);
+				removecards.add(s);
+			}
+		}
+		if(targetroot.compareTo(s) > 0) 
+		{
+			removeCardsRec(targetroot.leftChild, s, n);
+		}
+		else if(targetroot.compareTo(s) < 0) 
+		{ 
+			removeCardsRec(targetroot.rightChild, s, n);
+		}
+	}
+	
+	public int contains(String s)
+	{
+		containsRec(root, s);
+		return contains;
+	}
+	
+	public void containsRec(BinaryCountNode targetroot, String s)
+	{
+		if(targetroot.compareTo(s) == 0) 
+		{
+			contains = targetroot.count;
+		}
+		if(targetroot.compareTo(s) > 0) 
+		{
+			containsRec(targetroot.leftChild, s);
+		}
+		else if(targetroot.compareTo(s) < 0) 
+		{ 
+			containsRec(targetroot.rightChild, s);
+		}
 	}
 }
