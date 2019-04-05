@@ -14,3 +14,10 @@ wild
 2 green
 5 white
 wild
+orange
+yellow
+red
+orange
+green
+black
+blue

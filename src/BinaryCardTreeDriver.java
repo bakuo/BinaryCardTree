@@ -5,11 +5,11 @@ import java.util.Scanner;
 
 public class BinaryCardTreeDriver 
 {	
+	static ArrayList<Goal> goals = new ArrayList<Goal>();
 	public static void main(String args[])
 	{
 		BinaryCardTree hand = new BinaryCardTree();
 		ArrayList<String> data = new ArrayList<String>();
-		ArrayList<Goal> goals = new ArrayList<Goal>();
 		ArrayList <String> deck = new ArrayList<String>();
 		
 		//reading in stuff from file
@@ -51,7 +51,32 @@ public class BinaryCardTreeDriver
 	    }	    
 	    
 	    System.out.println("hand size: " + hand.numCardsInHand());
-	    System.out.print("hand --> " + hand.getAllCards());
-	    
+	    System.out.print("hand --> ");
+	    hand.getAllCards();
+	    System.out.println();
+	    for(int i = 0; i < goals.size(); i++)
+	    {
+	    	hand.removeCards(goals.get(i).getnumber(), goals.get(i).getString(), i);
+	    	if(goals.get(i).completed == true)
+	    	{
+	    		System.out.println(goals.get(i).getnumber() + "-" + goals.get(i).getString() + " is completed: " + BinaryCardTree.removecards);
+	    	}
+	    	else
+	    	{
+	    		System.out.println("Uncompleted Goals:");
+	    		System.out.println(goals.get(i).getnumber() + "-" + goals.get(i).getString());
+	    	}
+	    }
+	    System.out.println("hand size: " + hand.numCardsInHand());
+	    System.out.print("hand --> ");
+	    hand.getAllCards();
+	    System.out.println();
+	    for(int i = 0; i < deck.size(); i++)
+	    {
+	    	hand.insertCard(deck.get(i));
+	    }
+	   //System.out.println("hand size: " + hand.numCardsInHand());
+	   //System.out.print("hand --> ");
+	   //hand.getAllCards();
 	}
 }

@@ -5,10 +5,9 @@ public class BinaryCardTree
 {
 	int numNodes = 0, largest, smallest, contains;
 	BinaryCountNode root = new BinaryCountNode();
-	ArrayList<String> cards = new ArrayList<String>();
 	ArrayList<String> colorLargest = new ArrayList<String>();
 	ArrayList<String> colorSmallest = new ArrayList<String>();
-	ArrayList<String> removecards = new ArrayList<String>();
+	static ArrayList<String> removecards = new ArrayList<String>();
 	
 	public void insertCard(String s)
 	{
@@ -53,18 +52,16 @@ public class BinaryCardTree
 			}
 			else if(targetroot.compareTo(val) == 0)
 			{
-				targetroot.incrementCount();
+				targetroot.count++;
 				numNodes++;
 			}
 		}
 		return root;
 	}	
 	
-	public ArrayList<String> getAllCards()
+	public void getAllCards()
 	{
-		cards.clear();
 		getAllCardsRec(root);
-		return cards;
 	}
 	
 	public void getAllCardsRec(BinaryCountNode targetroot)
@@ -76,12 +73,12 @@ public class BinaryCardTree
 			{
 				for(int i = 0; i < targetroot.count; i++)
 				{
-					cards.add(targetroot.toString());
+					System.out.print(targetroot.toString() + " ");
 				}
 			}
-			else
+			else if(targetroot.count == 1)
 			{
-				cards.add(targetroot.toString());
+				System.out.print(targetroot.toString() + " ");
 			}
 			getAllCardsRec(targetroot.rightChild);
 		}
@@ -150,32 +147,75 @@ public class BinaryCardTree
 		}
 	}
 	
-	public ArrayList<String> removeCards(String s, int n)
+	public ArrayList<String> removeCards(int n, String s, int goalsindex)
 	{
 		removecards.clear();
-		removeCardsRec(root, s, n);
+		removeCardsRec(root, n, s, goalsindex);
 		return removecards;
 	}
 	
-	public void removeCardsRec(BinaryCountNode targetroot, String s, int n)
+	
+	public void removeCardsRec(BinaryCountNode targetroot, int goaln, String goals, int goalsindex)
 	{
-		if(targetroot.compareTo(s) == 0) 
+		int numWild = contains("wild");
+		if(targetroot.color.compareTo(goals) == 0) 
 		{
-			for(int i=0;i<n;i++)
+			if(targetroot.count >= goaln)
+			{
+				System.out.println("test");
+				for(int i = 0 ; i < goaln; i++)
+				{
+					targetroot.count--;
+					numNodes--;
+				}
+				removecards.add(goals);
+				BinaryCardTreeDriver.goals.get(goalsindex).completed = true;
+			}
+			else if(targetroot.count + numWild >= goaln)
+			{
+				goaln -= targetroot.count;
+				for(int i = 0; i < targetroot.count; i++)
+				{
+					targetroot.count--;
+					numNodes--;
+				}
+				removecards.add(goals);
+				removeWilds(root, goaln);
+				BinaryCardTreeDriver.goals.get(goalsindex).completed = true;
+			}
+			else
+			{
+				BinaryCardTreeDriver.goals.get(goalsindex).completed = false;
+			}
+		}
+		if(targetroot.color.compareTo(goals) > 0) 
+		{
+			removeCardsRec(targetroot.leftChild, goaln, goals, goalsindex);
+		}
+		else if(targetroot.color.compareTo(goals) < 0) 
+		{ 
+			removeCardsRec(targetroot.rightChild, goaln, goals, goalsindex);
+		}
+	}
+	
+	public void removeWilds(BinaryCountNode targetroot, int n)
+	{
+		if(targetroot.compareTo("wild") == 0) 
+		{
+			for(int i = 0; i < n; i++)
 			{
 				targetroot.count--;
 				numNodes--;
-				cards.remove(s);
-				removecards.add(s);
 			}
+			removecards.add("wild");
 		}
-		if(targetroot.compareTo(s) > 0) 
+		if(targetroot.compareTo("wild") > 0) 
 		{
-			removeCardsRec(targetroot.leftChild, s, n);
+			removeWilds(targetroot.leftChild, n);
 		}
-		else if(targetroot.compareTo(s) < 0) 
+		else if(targetroot.compareTo("wild") < 0) 
 		{ 
-			removeCardsRec(targetroot.rightChild, s, n);
+			removeWilds(targetroot.rightChild, n);
 		}
 	}
 	
